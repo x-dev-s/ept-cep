@@ -1,5 +1,6 @@
 import { Inter, Archivo_Black, Anton } from "next/font/google";
 import "./globals.css";
+import PageLoading from "@/components/pageLoading";
 
 const sans = Inter({
   subsets: ["latin"],
@@ -80,6 +81,7 @@ export default function RootLayout({ children }) {
             <div className="container z-10 px-3 py-10 flex flex-col justify-center">
               {children}
             </div>
+            <PageLoading />
         </main>
       </body>
     </html >
