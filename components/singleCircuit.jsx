@@ -58,12 +58,12 @@ export default function SingleCircuit() {
         else if (data.number_of_bundled_conductors === 3) { ds = Math.cbrt(r_dash * pow(data.bundle_spacing, 2)); }
         else { ds = 1.09 * Math.pow(r_dash * pow(data.bundle_spacing, 3), 0.25); }
         console.log("ds: ", ds);
-        if (!Array.isArray(data.distance_between_phases) || AreAllElementsSame(data.distance_between_phases)) {
-          dm = !Array.isArray(data.distance_between_phases) ? data.distance_between_phases : data.distance_between_phases[0];
+        if (!Array.isArray(data.phase_spacing) || AreAllElementsSame(data.phase_spacing)) {
+          dm = !Array.isArray(data.phase_spacing) ? data.phase_spacing : data.phase_spacing[0];
           console.log("symmetric: ", dm);
         } else {
-          console.log(data.distance_between_phases.reduce((a, b) => a * b));
-          dm = Math.cbrt(data.distance_between_phases.reduce((a, b) => a * b));
+          console.log(data.phase_spacing.reduce((a, b) => a * b));
+          dm = Math.cbrt(data.phase_spacing.reduce((a, b) => a * b));
         }
         console.log("dm: ", dm);
         if (!isInductanceProvided) {
@@ -85,12 +85,12 @@ export default function SingleCircuit() {
       console.log("Density Factor: ", density_factor);
       const dcv_gradient = 2.12e6;
       const phase_voltage = data.voltage / Math.sqrt(3)
-      const D = isNaN(data.cross_arm_distance) ? isArray(data.phase_spacing) ? Math.cbrt(data.phase_spacing.reduce((a, b) => a * b)) : data.phase_spacing : !isArray(data.phase_spacing) ? Math.pow(data.cross_arm_distance * Math.pow(data.phase_spacing, 3), 1 / 4) : Math.pow(data.cross_arm_distance * data.phase_spacing.reduce((a, b) => a * b), 1 / 4);
-      console.log("D: ", D);
-      let dcv = data.surface_factor * density_factor * dcv_gradient * r * Math.log(D / r);
+      // const D = isNaN(data.cross_arm_distance) ? isArray(data.phase_spacing) ? Math.cbrt(data.phase_spacing.reduce((a, b) => a * b)) : data.phase_spacing : !isArray(data.phase_spacing) ? Math.pow(data.cross_arm_distance * Math.pow(data.phase_spacing, 3), 1 / 4) : Math.pow(data.cross_arm_distance * data.phase_spacing.reduce((a, b) => a * b), 1 / 4);
+      // console.log("D: ", D);
+      let dcv = data.surface_factor * density_factor * dcv_gradient * r * Math.log(dm / r);
       dcv = dcv * 1e-3;
       console.log("dcv: ", dcv);
-      let corona_loss = (244 / density_factor) * (data.frequency + 25) * Math.pow(phase_voltage - dcv, 2) * Math.sqrt(r / D) * 1e-5;
+      let corona_loss = (244 / density_factor) * (data.frequency + 25) * Math.pow(phase_voltage - dcv, 2) * Math.sqrt(r / dm) * 1e-5;
       console.log("Corona Loss: ", corona_loss);
 
       const Vr = phase_voltage * 1e3;
@@ -276,55 +276,17 @@ export default function SingleCircuit() {
           <div className="flex flex-col gap-6">
             <p className="text-2xl font-bold underline underline-offset-4">For Inductance & Capacitance</p>
             <div className="flex flex-wrap gap-5 items-center justify-center">
-              <div className='flex flex-col gap-2 basis-64 max-w-[450px] flex-1'>
+              <div className='flex flex-col gap-2 basis-64 flex-1'>
                 <label htmlFor="number_of_bundled_conductors" className="font-bold">Number of Bundled Conductors</label>
                 <div className="p-2 border-b-2 border-white flex items-center gap-2 has-[:focus]:bg-white/20">
                   <input required type="number" min={2} max={4} step={1} name="number_of_bundled_conductors" className="border-none placeholder:text-gray-300 focus:outline-none bg-transparent flex-1" />
                 </div>
               </div>
 
-              <div className='flex flex-col gap-2 basis-64 max-w-[450px] flex-1'>
+              <div className='flex flex-col gap-2 basis-64 flex-1'>
                 <label htmlFor="bundle_spacing" className="font-bold">Bundle Spacing</label>
                 <div className="p-2 border-b-2 border-white flex items-center gap-2 has-[:focus]:bg-white/20">
                   <input required min={0} step={0.0001} type="number" name="bundle_spacing" placeholder="(m)" className="border-none placeholder:text-gray-300 focus:outline-none bg-transparent flex-1" />
-                </div>
-              </div>
-
-              <div className='flex flex-col gap-2 basis-64 max-w-[450px] flex-1'>
-                <label htmlFor="self_distance" className="font-bold">Self Distance</label>
-                <div className="p-2 border-b-2 border-white flex items-center gap-2 has-[:focus]:bg-white/20">
-                  <input required type="text" pattern="^[0-9.,]*$" name="self_distance" placeholder="(m)" className="border-none placeholder:text-gray-300 focus:outline-none bg-transparent flex-1" onInput={(e) => e.target.setCustomValidity(e.target.validity.patternMismatch ? "Please enter a comma separated list of numbers" : "")} />
-                  <span className="cursor-pointer relative group">
-                    <div className="hidden absolute group-hover:block -top-24 right-0 bg-gray-100 text-black p-2 rounded-lg shadow-lg w-[250px]">
-                      <p>Seperate the self distance of all phases &quot;A-A&apos;, B-B&apos;, C-C&apos;&quot; by a comma &quot;,&quot; for each phase. </p>
-                    </div>
-                    <IoInformation size={18} className="text-gray-600 bg-white rounded-full flex items-center justify-center p-[2px]" />
-                  </span>
-                  <span className='cursor-pointer relative group'>
-                    <div className="hidden absolute group-hover:flex -top-20 right-0 bg-gray-100 text-black p-2 rounded-lg shadow-lg w-[250px] items-center justify-center">
-                      <Image src="/images/self_distance.jpg" width={200} height={100} alt="Self Distance Formula" className='object-contain mix-blend-darken' />
-                    </div>
-                    <RiFormula size={18} className="text-gray-600 bg-white rounded-full flex items-center justify-center p-[2px]" />
-                  </span>
-                </div>
-              </div>
-
-              <div className='flex flex-col gap-2 basis-64 max-w-[450px] flex-1'>
-                <label htmlFor="distance_between_phases" className="font-bold">Distance between Phases</label>
-                <div className="p-2 border-b-2 border-white flex items-center gap-2 has-[:focus]:bg-white/20">
-                  <input required type="text" pattern="^[0-9.,]*$" name="distance_between_phases" placeholder="(m)" className="border-none placeholder:text-gray-300 focus:outline-none bg-transparent flex-1" onInput={(e) => e.target.setCustomValidity(e.target.validity.patternMismatch ? "Please enter a comma separated list of numbers" : "")} />
-                  <span className="cursor-pointer relative group">
-                    <div className="hidden absolute group-hover:block -top-24 right-0 bg-gray-100 text-black p-2 rounded-lg shadow-lg w-[250px]">
-                      <p>Seperate the distance between phases &quot;AB, BC, CA&quot; by a comma &quot;,&quot;. </p>
-                    </div>
-                    <IoInformation size={18} className="text-gray-600 bg-white rounded-full flex items-center justify-center p-[2px]" />
-                  </span>
-                  <span className="cursor-pointer relative group">
-                    <div className="hidden absolute group-hover:flex -top-20 right-0 bg-gray-100 text-black p-2 rounded-lg shadow-lg w-[250px] items-center justify-center">
-                      <Image src="/images/distance_between_phases.jpg" width={200} height={120} alt="Distance between Phases Formula" className='object-contain mix-blend-darken' />
-                    </div>
-                    <RiFormula size={18} className="text-gray-600 bg-white rounded-full flex items-center justify-center p-[2px]" />
-                  </span>
                 </div>
               </div>
             </div>
@@ -380,8 +342,8 @@ export default function SingleCircuit() {
               <div className="p-2 border-b-2 border-white flex items-center gap-2 has-[:focus]:bg-white/20">
                 <input required type="text" pattern="^[0-9.,]*$" name="phase_spacing" placeholder="(m)" className="border-none placeholder:text-gray-300 focus:outline-none bg-transparent flex-1" />
                 <span className="cursor-pointer relative group" onInput={(e) => e.target.setCustomValidity(e.target.validity.patternMismatch ? "Please enter a comma separated list of numbers" : "")}>
-                  <div className="hidden group-hover:block absolute -top-20 right-0 bg-gray-100 text-black p-2 rounded-lg shadow-lg w-[250px]">
-                    <p>Seperate phase spacing by a comma &quot;,&quot; for all phases, if unsymmetric, in the sequence of &quot;A-B, B-C, C-A&quot;</p>
+                  <div className="hidden group-hover:block absolute -top-24 right-0 bg-gray-100 text-black p-2 rounded-lg shadow-lg w-[250px]">
+                    <p>If unsymmetric, seperate phase spacing by a comma &quot;,&quot; for all phases in the sequence of &quot;A-B, B-C, C-A&quot;</p>
                   </div>
                   <IoInformation size={18} className="text-gray-600 bg-white rounded-full flex items-center justify-center p-[2px]" />
                 </span>

@@ -60,9 +60,9 @@ export default function SingleCircuit() {
         else if (data.number_of_bundled_conductors === 3) { dsb = Math.cbrt(r_dash * pow(data.bundle_spacing, 2)); }
         else { dsb = 1.09 * Math.pow(r_dash * pow(data.bundle_spacing, 3), 0.25); }
         console.log("dsb: ", dsb);
-        ds1 = pow(pow(dsb, 2) + pow(data.self_distance[0], 2), 0.25);
-        ds2 = pow(pow(dsb, 2) + pow(data.self_distance[1], 2), 0.25);
-        ds3 = pow(pow(dsb, 2) + pow(data.self_distance[2], 2), 0.25);
+        let ds1 = pow(pow(dsb, 2) + pow(data.self_distance[0], 2), 0.25);
+        let ds2 = pow(pow(dsb, 2) + pow(data.self_distance[1], 2), 0.25);
+        let ds3 = pow(pow(dsb, 2) + pow(data.self_distance[2], 2), 0.25);
 
         ds = cbrt(ds1 * ds2 * ds3);
 
@@ -93,12 +93,12 @@ export default function SingleCircuit() {
       console.log("Density Factor: ", density_factor);
       const dcv_gradient = 2.12e6;
       const phase_voltage = data.voltage / Math.sqrt(3)
-      const D = isNaN(data.cross_arm_distance) ? isArray(data.phase_spacing) ? Math.cbrt(data.phase_spacing.reduce((a, b) => a * b)) : data.phase_spacing : !isArray(data.phase_spacing) ? Math.pow(data.cross_arm_distance * Math.pow(data.phase_spacing, 3), 1 / 4) : Math.pow(data.cross_arm_distance * data.phase_spacing.reduce((a, b) => a * b), 1 / 4);
-      console.log("D: ", D);
-      let dcv = data.surface_factor * density_factor * dcv_gradient * r * Math.log(D / r);
+      // const D = isNaN(data.cross_arm_distance) ? isArray(data.phase_spacing) ? Math.cbrt(data.phase_spacing.reduce((a, b) => a * b)) : data.phase_spacing : !isArray(data.phase_spacing) ? Math.pow(data.cross_arm_distance * Math.pow(data.phase_spacing, 3), 1 / 4) : Math.pow(data.cross_arm_distance * data.phase_spacing.reduce((a, b) => a * b), 1 / 4);
+      // console.log("D: ", D);
+      let dcv = data.surface_factor * density_factor * dcv_gradient * r * Math.log(dm / r);
       dcv = dcv * 1e-3;
       console.log("dcv: ", dcv);
-      let corona_loss = (244 / density_factor) * (data.frequency + 25) * Math.pow(phase_voltage - dcv, 2) * Math.sqrt(r / D) * 1e-5;
+      let corona_loss = (244 / density_factor) * (data.frequency + 25) * Math.pow(phase_voltage - dcv, 2) * Math.sqrt(r / dm) * 1e-5;
       console.log("Corona Loss: ", corona_loss);
 
       const Vr = phase_voltage * 1e3;
@@ -317,6 +317,7 @@ export default function SingleCircuit() {
                 </div>
               </div>
 
+
               <div className='flex flex-col gap-2 basis-64 max-w-[450px] flex-1'>
                 <label htmlFor="distance_between_phases" className="font-bold">Distance between Phases</label>
                 <div className="p-2 border-b-2 border-white flex items-center gap-2 has-[:focus]:bg-white/20">
@@ -388,8 +389,8 @@ export default function SingleCircuit() {
               <div className="p-2 border-b-2 border-white flex items-center gap-2 has-[:focus]:bg-white/20">
                 <input required type="text" pattern="^[0-9.,]*$" name="phase_spacing" placeholder="(m)" className="border-none placeholder:text-gray-300 focus:outline-none bg-transparent flex-1" />
                 <span className="cursor-pointer relative group" onInput={(e) => e.target.setCustomValidity(e.target.validity.patternMismatch ? "Please enter a comma separated list of numbers" : "")}>
-                  <div className="hidden group-hover:block absolute -top-20 right-0 bg-gray-100 text-black p-2 rounded-lg shadow-lg w-[250px]">
-                    <p>Seperate phase spacing by a comma &quot;,&quot; for all phases, if unsymmetric, in the sequence of &quot;A-B, B-C, C-A&quot;</p>
+                  <div className="hidden group-hover:block absolute -top-24 right-0 bg-gray-100 text-black p-2 rounded-lg shadow-lg w-[250px]">
+                    <p>If unsymmetric, seperate phase spacing by a comma &quot;,&quot; for all phases in the sequence of &quot;A-B, B-C, C-A&quot;</p>
                   </div>
                   <IoInformation size={18} className="text-gray-600 bg-white rounded-full flex items-center justify-center p-[2px]" />
                 </span>
