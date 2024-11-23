@@ -210,35 +210,35 @@ export default function SingleCircuit() {
             <div className='flex flex-col gap-2 basis-64 max-w-[450px] flex-1'>
               <label htmlFor="voltage" className="font-bold">Voltage</label>
               <div className="p-2 border-b-2 border-white flex items-center gap-2 has-[:focus]:bg-white/20">
-                <input required min={0} step={0.0001} type="number" name="voltage" placeholder="(kV)" className="border-none placeholder:text-gray-300 focus:outline-none bg-transparent flex-1" />
+                <input required min={0} max={600} step={0.0001} type="number" name="voltage" placeholder="(kV)" className="border-none placeholder:text-gray-300 focus:outline-none bg-transparent flex-1" />
               </div>
             </div>
 
             <div className='flex flex-col gap-2 basis-64 max-w-[450px] flex-1'>
               <label htmlFor="frequency" className="font-bold">Frequency</label>
               <div className="p-2 border-b-2 border-white flex items-center gap-2 has-[:focus]:bg-white/20">
-                <input required min={0} step={0.0001} type="number" name="frequency" placeholder="(Hz)" className="border-none placeholder:text-gray-300 focus:outline-none bg-transparent flex-1" />
+                <input required min={45} max={65} step={0.0001} type="number" name="frequency" placeholder="(Hz)" className="border-none placeholder:text-gray-300 focus:outline-none bg-transparent flex-1" />
               </div>
             </div>
 
             <div className='flex flex-col gap-2 basis-64 max-w-[450px] flex-1'>
               <label htmlFor="power" className="font-bold">Power</label>
               <div className="p-2 border-b-2 border-white flex items-center gap-2 has-[:focus]:bg-white/20">
-                <input required min={0} step={0.0001} type="number" name="power" placeholder="(MVA)" className="border-none placeholder:text-gray-300 placeholder:text-xs focus:outline-none bg-transparent flex-1" />
+                <input required min={0} max={1000} step={0.0001} type="number" name="power" placeholder="(MVA)" className="border-none placeholder:text-gray-300 placeholder:text-xs focus:outline-none bg-transparent flex-1" />
               </div>
             </div>
 
             <div className='flex flex-col gap-2 basis-64 max-w-[450px] flex-1'>
               <label htmlFor="power_factor" className="font-bold">Power Factor</label>
               <div className="p-2 border-b-2 border-white flex items-center gap-2 has-[:focus]:bg-white/20">
-                <input required min={0} step={0.0001} type="number" name="power_factor" className="border-none placeholder:text-gray-300 focus:outline-none bg-transparent flex-1" />
+                <input required min={0} max={1} step={0.0001} type="number" name="power_factor" className="border-none placeholder:text-gray-300 focus:outline-none bg-transparent flex-1" />
               </div>
             </div>
 
             <div className='flex flex-col gap-2 basis-64 max-w-[450px] flex-1'>
               <label htmlFor="line_length" className="font-bold">Line Length</label>
               <div className="p-2 border-b-2 border-white flex items-center gap-2 has-[:focus]:bg-white/20">
-                <input required min={0} step={0.0001} type="number" name="line_length" placeholder="(km)" className="border-none placeholder:text-gray-300 focus:outline-none bg-transparent flex-1" />
+                <input required min={80} max={160} step={0.0001} type="number" name="line_length" placeholder="(km)" className="border-none placeholder:text-gray-300 focus:outline-none bg-transparent flex-1" />
               </div>
             </div>
 
@@ -286,7 +286,7 @@ export default function SingleCircuit() {
               <div className='flex flex-col gap-2 basis-64 flex-1'>
                 <label htmlFor="bundle_spacing" className="font-bold">Bundle Spacing</label>
                 <div className="p-2 border-b-2 border-white flex items-center gap-2 has-[:focus]:bg-white/20">
-                  <input required min={0} step={0.0001} type="number" name="bundle_spacing" placeholder="(m)" className="border-none placeholder:text-gray-300 focus:outline-none bg-transparent flex-1" />
+                  <input required min={0} max={2} step={0.00001} type="number" name="bundle_spacing" placeholder="(m)" className="border-none placeholder:text-gray-300 focus:outline-none bg-transparent flex-1" />
                 </div>
               </div>
             </div>
@@ -299,28 +299,28 @@ export default function SingleCircuit() {
             <div className='flex flex-col gap-2 basis-64 max-w-[450px] flex-1'>
               <label htmlFor='pressure' className='font-bold'>Pressure</label>
               <div className="p-2 border-b-2 border-white flex items-center gap-2 has-[:focus]:bg-white/20">
-                <input required min={0} step={0.0001} type="number" name="pressure" placeholder="(mm of Hg)" className="border-none placeholder:text-gray-300 focus:outline-none bg-transparent flex-1" />
+                <input required min={600} max={900} step={0.0001} type="number" name="pressure" placeholder="(mm of Hg)" className="border-none placeholder:text-gray-300 focus:outline-none bg-transparent flex-1" />
               </div>
             </div>
 
             <div className='flex flex-col gap-2 basis-64 max-w-[450px] flex-1'>
               <label htmlFor='temperature' className='font-bold'>Temperature</label>
               <div className="p-2 border-b-2 border-white flex items-center gap-2 has-[:focus]:bg-white/20">
-                <input required min={0} step={0.0001} type="number" name="temperature" placeholder="(°C)" className="border-none placeholder:text-gray-300 focus:outline-none bg-transparent flex-1" />
+                <input required min={15} max={50} step={0.0001} type="number" name="temperature" placeholder="(°C)" className="border-none placeholder:text-gray-300 focus:outline-none bg-transparent flex-1" />
               </div>
             </div>
 
             <div className='flex flex-col gap-2 basis-64 max-w-[450px] flex-1'>
               <label htmlFor='max_temperature' className='font-bold'>Max. Temperature</label>
               <div className="p-2 border-b-2 border-white flex items-center gap-2 has-[:focus]:bg-white/20">
-                <input required min={0} step={0.0001} type="number" name="max_temperature" placeholder="(°C)" className="border-none placeholder:text-gray-300 focus:outline-none bg-transparent flex-1" />
+                <input required min={15} max={60} step={0.0001} type="number" name="max_temperature" placeholder="(°C)" className="border-none placeholder:text-gray-300 focus:outline-none bg-transparent flex-1" />
               </div>
             </div>
 
             <div className='flex flex-col gap-2 basis-64 max-w-[450px] flex-1'>
               <label htmlFor='surface_factor' className='font-bold'>Surface Factor</label>
               <div className="p-2 border-b-2 border-white flex items-center gap-2 has-[:focus]:bg-white/20">
-                <input required min={0} step={0.0001} type="number" name="surface_factor" className="border-none placeholder:text-gray-300 focus:outline-none bg-transparent flex-1" />
+                <input required min={0} max={1} step={0.0001} type="number" name="surface_factor" className="border-none placeholder:text-gray-300 focus:outline-none bg-transparent flex-1" />
                 <span className='cursor-pointer relative group'>
                   <div className="hidden group-hover:block absolute -top-28 right-0 bg-gray-100 text-black p-2 rounded-lg shadow-lg w-[250px]">
                     <p>Surface factor or irregularity factor or roughness factor is the ratio of the actual surface area to the projected surface area.</p>
@@ -333,7 +333,7 @@ export default function SingleCircuit() {
             <div className='flex flex-col gap-2 basis-64 max-w-[450px] flex-1'>
               <label htmlFor='cross_arm_distance' className='font-bold'>Cross Arm Distance</label>
               <div className="p-2 border-b-2 border-white flex items-center gap-2 has-[:focus]:bg-white/20">
-                <input min={0} step={0.0001} type="number" name="cross_arm_distance" placeholder="(m)" className="border-none placeholder:text-gray-300 focus:outline-none bg-transparent flex-1" />
+                <input min={0} max={10} step={0.0001} type="number" name="cross_arm_distance" placeholder="(m)" className="border-none placeholder:text-gray-300 focus:outline-none bg-transparent flex-1" />
               </div>
             </div>
 
